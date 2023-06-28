@@ -97,6 +97,12 @@ static void testVectorDel(void)
 	__show(vec);
 }
 
+/* intend to forget '&' after vector<vector<int>> */
+static void __testMatrix(vector<vector<int>> matrix)
+{
+	matrix[0][0] = 10;
+}
+
 static void testVector2D(void)
 {
 	cout << "=== testVector2D ===" << endl;
@@ -120,6 +126,12 @@ static void testVector2D(void)
 	}
 	for (int i = 0; i < matrix3.size(); i++)
 		__show(matrix3[i]);
+
+	/* what will happend if pass matrix as a argument to function */
+	__testMatrix(matrix2);
+	cout << "after modified matrix2 with __testMatrix(): " << endl;
+	for (int i = 0; i < matrix2.size(); i++)
+		__show(matrix2[i]);
 }
 
 static vector<int> __testVectorArgAndRet(vector<int>& arg1, vector<int> arg2)

@@ -29,8 +29,33 @@ static void testMapKeyExists(void)
 	// 2. count
 }
 
+static void testMapIterator(void)
+{
+	cout << "=== testMapIterator ===" << endl;
+
+	map<int, int> m;
+
+	m[1] = 1;
+	m[2] = 2;
+	m[3] = 3;
+
+	map<int, int>::iterator it = m.begin();
+	while (it != m.end()) {
+		cout << it->first << "," << it->second << endl;
+		it++;
+	}
+	for (map<int, int>::iterator it = m.begin(); it != m.end(); it++) {
+		cout << it->first << "," << it->second << endl;
+	}
+	for (auto n: m)
+		cout << n.first << "," << n.second << endl;
+	for (pair<int,int> n: m)
+		cout << n.first << "," << n.second << endl;
+}
+
 int main(void)
 {
 	testMapAdd();
+	testMapIterator();
 	return 0;
 }
