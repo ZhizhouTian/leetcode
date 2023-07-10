@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <queue>
 
 using namespace std;
 
@@ -52,6 +53,25 @@ public:
 	}
 };
 
+class PriorityQueueTest {
+	priority_queue<int, vector<int>, greater<int>> min;
+	priority_queue<int, vector<int>, less<int>> max;
+public:
+
+	void add(int value) {
+		this->min.push(value);
+		this->max.push(value);
+	}
+
+	int topmax(void) {
+		return this->max.top();
+	}
+
+	int topmin(void) {
+		return this->min.top();
+	}
+};
+
 Search g_search = {
 	.tcs = {
 		{.arr = {2, 5, 8, 12, 19}, .target = 20, .result = -1},
@@ -75,4 +95,10 @@ int main(void)
 
 	if (!g_search.test())
 		cout << "search failed\n" << endl;
+
+	PriorityQueueTest pqtest;
+	pqtest.add(1);
+	pqtest.add(2);
+	pqtest.add(3);
+	cout << "max: " << pqtest.topmax() << "min: " << pqtest.topmin() << endl;
 }
