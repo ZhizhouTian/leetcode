@@ -68,80 +68,49 @@
 #include <vector>
 #include <map>
 #include <algorithm>
+#include <iterator>
 
 using namespace std;
 
 // @lc code=start
 class Solution {
-public:
-    vector<vector<int>> twoSum(vector<int> nums, int start, int end, int target) {
+    vector<vector<int>> twoSum(vector<int>& nums, int start, int end, int target) {
         vector<vector<int>> result;
-        map<int, int> m;
 
-        int last;
-        bool dup = false;
-        for (int i = start; i < end; i++) {
-            if (dup && i - start != 0 && last == nums[i])
-                continue;
-            last = nums[i];
-            if (m.count(nums[i]) > 0) {
-                result.push_back({m[nums[i]], nums[i]});
-                dup = true;
+        while (start < end) {
+            int sum = target+nums[start]+nums[end];
+            if (sum == 0) {
+                result.push_back({target, nums[start], nums[end]});
+                start++;
+                end--;
+                while (nums[start] == nums[start-1] && start < end)
+                    start++;
+                while (nums[end] == nums[end+1] && start < end)
+                    end--;
+            } else if (sum > 0) {
+                end--;
             } else {
-                m[target - nums[i]] = nums[i];
-                dup = false;
+                start++;
             }
         }
-
         return result;
     }
 
+public:
     vector<vector<int>> threeSum(vector<int>& nums) {
-        vector<vector<int>> result;
-        /* 1. sort nums */
+        vector<vector<int>> answer;
+        if (nums.size() < 3) return answer;
+
         sort(nums.begin(), nums.end());
 
-        int last;
-        for (int i = 0; i < nums.size(); i++) {
-            /* 2. skip if current equals last */
-            if (i != 0 && nums[i] == last)
-                continue;
-            last = nums[i];
-
-            /* 3. get all twoSum(nums, i, j, target) */
-            vector<vector<int>> twoSumVec = twoSum(nums, i+1, nums.size(), 0 - nums[i]);
-
-            /* 4. add each of twoSumVec into result */
-            for (int j = 0; j < twoSumVec.size(); j++) {
-                vector<int>& v = twoSumVec[j];
-                result.push_back({nums[i], v[0], v[1]});
-            }
+        for (int i=0; i<nums.size(); i++) {
+            if (nums[i] > 0) break;
+            if (i>=1 && nums[i]==nums[i-1]) continue;
+            auto result = twoSum(nums, i+1, nums.size()-1, nums[i]);
+            if (result.size() == 0) continue;
+            answer.insert(answer.end(), result.begin(), result.end());
         }
 
-        return result;
-    }
-
-    void showMatrix(vector<vector<int>> matrix) {
-        cout << '[';
-        for (int i = 0; i < matrix.size(); i++) {
-            cout << '[';
-            for (int j = 0; j < matrix[i].size(); j++) {
-                cout << matrix[i][j] << ',';
-            }
-            cout << "] ";
-        }
-        cout << ']' << endl;
+        return answer;
     }
 };
-
-#if 0
-int main(void)
-{
-    Solution s;
-    vector<int> nums = {-2,0,1,1,2};
-    auto ret = s.threeSum(nums);
-    s.showMatrix(ret);
-}
-#endif
-// @lc code=end
-

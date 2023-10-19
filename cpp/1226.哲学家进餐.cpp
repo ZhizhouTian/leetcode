@@ -78,10 +78,32 @@ using namespace std;
 // @lc code=start
 class DiningPhilosophers {
     vector<int> forks;
-    mutex mtx;
+    pthread_mutex_t mtx;
+    pthread_cond_t cond;
 public:
     DiningPhilosophers() {
-        forks.resize(5);
+        forks.resize(5, 0);
+        pthread_mutex_init(&mtx, NULL);
+        pthread_cond_init(&cond, NULL);
+    }
+
+    void lock(int philosopher) {
+        int left = philosopher;
+        int right = (philosopher+1)%5;
+        pthread_mutex_lock(&mtx);
+        while (forks[left] || forks[right])
+            pthread_cond_wait(&cond, &mtx);
+        forks[left] = 1;
+        forks[right] = 1;
+    }
+
+    void unlock(int philosopher) {
+        int left = philosopher;
+        int right = (philosopher+1)%5;
+        forks[left] = 0;
+        forks[right] = 0;
+        pthread_mutex_unlock(&mtx);
+        pthread_cond_broadcast(&cond);
     }
 
     void wantsToEat(int philosopher,
@@ -90,28 +112,13 @@ public:
                     function<void()> eat,
                     function<void()> putLeftFork,
                     function<void()> putRightFork) {
-        mtx.lock();
-        if (philosopher < 0 || philosopher > 4)
-            goto end;
-        int left, right;
-        if (philosopher == 0)
-            left = 4;
-        else
-            left = philosopher - 1;
-        right = philosopher;
-        if (forks[left] || forks[right])
-            goto end;
-        forks[left] = 1;
-        forks[right] = 1;
+        lock(philosopher);
         pickLeftFork();
         pickRightFork();
         eat();
         putLeftFork();
         putRightFork();
-        forks[left] = 0;
-        forks[right] = 0;
-    end:
-        mtx.unlock();
+        unlock(philosopher);
     }
 };
 // @lc code=end

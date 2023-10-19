@@ -81,10 +81,10 @@ public:
     vector<int> twoSum(vector<int>& nums, int target) {
         map<int, int> m;
 
-        for (auto it = nums.begin(); it < nums.end(); it++) {
-            if (m.count(*it) > 0)
-                return {m[*it], int(it - nums.begin())};
-            m[target - *it] = int(it - nums.begin());
+        for (int i=0; i<nums.size(); i++) {
+            if (m.count(nums[i]) > 0)
+                return {m[nums[i]], i};
+            m[target - nums[i]] = i;
         }
 
         return {};

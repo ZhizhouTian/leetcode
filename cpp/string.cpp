@@ -1,4 +1,5 @@
 #include <string>
+#include <string.h>
 #include <iostream>
 
 using namespace std;
@@ -40,10 +41,23 @@ void testStringSize(void)
 	cout << hello.size() << endl;
 }
 
+void testSplit(void)
+{
+	cout << "Test String Split" << endl;
+
+	string s = "dog cat cat dog";
+	char *split = strtok((char*)s.c_str(), " ");
+	while (split) {
+		cout << string(split) << endl;
+		split = strtok(NULL, " ");
+	}
+}
+
 int main(void)
 {
 	testStringConstruct();
 	testStringIterator();
 	testStringSize();
+	testSplit();
 	return 0;
 }

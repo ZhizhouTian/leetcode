@@ -1,6 +1,11 @@
 {
     "C_Cpp.errorSquiggles": "disabled",
     "files.associations": {
-        "*.tcc": "cpp"
+        "*.tcc": "cpp",
+        "list": "cpp",
+        "map": "cpp",
+        "algorithm": "cpp",
+        "compare": "cpp",
+        "iosfwd": "cpp"
     }
 }

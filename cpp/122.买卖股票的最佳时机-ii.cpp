@@ -58,11 +58,27 @@
  * 
  */
 
+#include <vector>
+
+using namespace std;
+
 // @lc code=start
 class Solution {
 public:
     int maxProfit(vector<int>& prices) {
+        vector<int> dp(prices.size());
+        if (!prices.size()) return 0;
 
+        for (int i=1; i<prices.size(); i++) {
+            dp[i] = prices[i] - prices[i-1];
+        }
+
+        int ret = 0;
+        for (auto& n: dp) {
+            if (n > 0)
+                ret += n;
+        }
+        return ret;
     }
 };
 // @lc code=end
